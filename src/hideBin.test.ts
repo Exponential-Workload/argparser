@@ -12,6 +12,7 @@ describe('hideBin', () => {
     expect(getProcessArgvBinIndex()).toBe(1)
   })
   it('should hide the binary name', () => {
-    expect(hideBin(process.argv)).toEqual([])
+    // args should be [] or ['--passWithNoTests']
+    expect(hideBin([...process.argv, '--passWithNoTests']).filter((a, b, c,) => c.indexOf(a) === b)).toEqual(['--passWithNoTests'])
   })
 })
