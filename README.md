@@ -60,7 +60,7 @@ For technical reference, see the [📝 Documentation](https://gh.expo.moe/argpar
 
 # 📜 License
 
-This project is licensed under the [📄 MIT License](./LICENSE)
+This project is licensed under the [📄 MIT License](https://gh.expo.moe/argparser/LICENSE.txt)
 
 # 🔗 See Also
 
