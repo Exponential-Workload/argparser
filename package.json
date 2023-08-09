@@ -1,6 +1,6 @@
 {
   "name": "@3xpo/argparser",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "parse node args",
   "main": "dist/lib.js",
   "module": "dist/lib.esm.js",
@@ -51,5 +51,6 @@
     "type": "git",
     "url": "https://github.com/Exponential-Workload/argparser.git"
   },
-  "homepage": "https://gh.expo.moe/argparser"
+  "homepage": "https://gh.expo.moe/argparser",
+  "sideEffects": false
 }
