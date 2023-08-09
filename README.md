@@ -3,7 +3,7 @@
 ![ArgParser 🔍](https://github.com/Exponential-Workload/argparser/blob/master/social.png?raw=true)
 
   [![📝 Documentation](https://img.shields.io/badge/📝-Documentation-blue)](https://gh.expo.moe/argparser)
-  [![📦 NPM](https://img.shields.io/npm/v/3xpo/argparser?label=📦%20NPM)](https://npmjs.com/package/@3xpo/argparser)
+  [![📦 NPM](https://img.shields.io/npm/v/%403xpo/argparser?label=📦%20NPM)](https://npmjs.com/package/@3xpo/argparser)
   [![🧪 Tests](https://img.shields.io/github/actions/workflow/status/Exponential-Workload/argparser/test.yml?branch=master&label=🧪%20Tests)](https://github.com/Exponential-Workload/argparser/actions/workflows/test.yml)
 
 Parse NodeJS CLI arguments with ease.
