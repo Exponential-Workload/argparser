@@ -64,5 +64,5 @@ This project is licensed under the [📄 MIT License](./LICENSE)
 
 # 🔗 See Also
 
-- [📦](https://npm.im/posixparser) [📁](https://github.com/Exponential-Workload/posixparser) posixparser — Parse a POSIX-CLI-Styled string into a string[]
-- [📦](https://npm.im/yargs) [📁](https://github.dev/yargs/yargs/) yargs — The project that heavily inspired this one
+- [📦](https://npm.im/posixparser) [📁](https://github.com/Exponential-Workload/posixparser) [posixparser](https://gh.expo.moe/posixparser/) — Parse a POSIX-CLI-Styled string into a string[]
+- [📦](https://npm.im/yargs) [📁](https://github.dev/yargs/yargs/) [yargs](https://yargs.js.org/) — The project that heavily inspired this one
