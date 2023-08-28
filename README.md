@@ -49,10 +49,10 @@ argParser.defineArgument({
 // generic is optional, however necessary for typesafety
 const args = argParser.parse<{
   arg1: string;
-}>(['--arg1' 'value1', '-c', 'hi']); // => { arg1: 'value1', arg2: true, _: ['hi'] }
+}>(['--arg1', 'value1', '-c', 'hi']); // => { arg1: 'value1', arg2: true, _: ['hi'] }
 const args2 = argParser.parse<{
   arg1: string;
-}>(['--arg1' 'value1', '-c', 'false', 'hi']); // => { arg1: 'value1', arg2: false, _: ['hi'] }
+}>(['--arg1', 'value1', '-c', 'false', 'hi']); // => { arg1: 'value1', arg2: false, _: ['hi'] }
 ```
 
 For more detailed examples, see the [🧪 Tests](https://github.com/Exponential-Workload/argparser/blob/master/src/main.test.ts).<br/>
