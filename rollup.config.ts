@@ -6,12 +6,12 @@ export default [
     input: 'src/main.ts',
     output: [
       {
-        file: 'dist/lib.js',
+        file: 'dist/lib.cjs',
         format: 'cjs',
         sourcemap: true,
       },
       {
-        file: 'dist/lib.esm.js',
+        file: 'dist/lib.esm.mjs',
         format: 'esm',
         sourcemap: true,
       }
