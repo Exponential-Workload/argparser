@@ -49,9 +49,11 @@ argParser.defineArgument({
 // generic is optional, however necessary for typesafety
 const args = argParser.parse<{
   arg1: string;
+  arg2: boolean;
 }>(['--arg1', 'value1', '-c', 'hi']); // => { arg1: 'value1', arg2: true, _: ['hi'] }
 const args2 = argParser.parse<{
   arg1: string;
+  arg2: boolean;
 }>(['--arg1', 'value1', '-c', 'false', 'hi']); // => { arg1: 'value1', arg2: false, _: ['hi'] }
 ```
 
