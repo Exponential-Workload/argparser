@@ -5,6 +5,7 @@
   "main": "dist/lib.cjs",
   "module": "dist/lib.esm.mjs",
   "types": "dist/main.d.ts",
+  "typings": "dist/main.d.ts",
   "scripts": {
     "build": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "build:docs": "typedoc --out docs --tsconfig doctsconfig.json dist/main.d.ts",
@@ -20,10 +21,15 @@
     ".": {
       "import": "./dist/lib.esm.mjs",
       "require": "./dist/lib.cjs",
-      "types": "./dist/main.d.ts"
+      "types": "./dist/main.d.ts",
+      "default": "./dist/lib.esm.mjs"
     }
   },
-  "keywords": [],
+  "keywords": [
+    "cli",
+    "args",
+    "arg-parsing"
+  ],
   "author": "Expo",
   "maintainers": [
     {
