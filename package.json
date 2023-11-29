@@ -10,7 +10,7 @@
     "build": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
     "build:docs": "typedoc --out docs --tsconfig doctsconfig.json dist/main.d.ts",
     "test": "jest --passWithNoTests",
-    "prepublishOnly": "npm run build && npm run build:docs",
+    "prepublishOnly": "npm run build && npm run build:docs && git push && git push --tags",
     "nodemonBase": "nodemon -e  ts,js,json,md --watch src --watch package.json --watch '*.config.js' --watch '*.config.ts' --watch tsconfig.json",
     "dev:docs:build": "npm run nodemonBase -- --watch doctsconfig.json --watch README.md --exec \"npm run build:docs\"",
     "dev:docs:serve": "cd docs && serve",
