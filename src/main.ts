@@ -44,10 +44,10 @@ export type ArgumentDefinition<
 > = {
   type: Type;
   name: Name;
-  aliases: string[];
+  description: string;
+  aliases?: string[];
   usageVariableName?: string;
   default?: ArgumentValue<Type>;
-  description: string;
 };
 export type ArgDefToArgObj<ArgDef extends ArgumentDefinition> = {
   [key in ArgDef['name']]: ArgumentValue<ArgDef['type']>;
