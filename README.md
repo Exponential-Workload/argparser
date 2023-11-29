@@ -2,17 +2,18 @@
 
 ![ArgParser 🔍](https://github.com/Exponential-Workload/argparser/blob/master/social.png?raw=true)
 
-  [![🧪 Tests](https://img.shields.io/github/actions/workflow/status/Exponential-Workload/argparser/test.yml?branch=master&label=🧪%20Tests)](https://github.com/Exponential-Workload/argparser/actions/workflows/test.yml)
-  [![📝 Documentation](https://img.shields.io/badge/📝-Docs-blue)](https://gh.expo.moe/argparser)
-  [![📦 NPM](https://img.shields.io/npm/v/%403xpo/argparser?label=📦%20NPM)](https://npmjs.com/package/@3xpo/argparser)
-  <br/>
-  [![📦 Bundle Size](https://img.shields.io/bundlephobia/min/%403xpo/argparser?label=📦%20Bundle%20Size)](https://bundlephobia.com/package/@3xpo/argparser) 
-  [![📁 Source Size](https://img.shields.io/github/languages/code-size/Exponential-Workload/argparser?label=📁%20Source%20Size)](https://github.com/Exponential-Workload/argparser)<br/>
+[![🧪 Tests](https://img.shields.io/github/actions/workflow/status/Exponential-Workload/argparser/test.yml?branch=master&label=🧪%20Tests)](https://github.com/Exponential-Workload/argparser/actions/workflows/test.yml)
+[![📝 Documentation](https://img.shields.io/badge/📝-Docs-blue)](https://gh.expo.moe/argparser)
+[![📦 NPM](https://img.shields.io/npm/v/%403xpo/argparser?label=📦%20NPM)](https://npmjs.com/package/@3xpo/argparser)
+<br/>
+[![📦 Bundle Size](https://img.shields.io/bundlephobia/min/%403xpo/argparser?label=📦%20Bundle%20Size)](https://bundlephobia.com/package/@3xpo/argparser)
+[![📁 Source Size](https://img.shields.io/github/languages/code-size/Exponential-Workload/argparser?label=📁%20Source%20Size)](https://github.com/Exponential-Workload/argparser)<br/>
 Parse NodeJS CLI arguments with ease.
 
 </div>
 
 # 📦 Table of Contents
+
 - [📦 Table of Contents](#-table-of-contents)
 - [🚀 Setup](#-setup)
 - [🛠️ Usage](#️-usage)
@@ -26,6 +27,32 @@ pnpm i @3xpo/argparser
 ```
 
 # 🛠️ Usage
+
+```ts
+import ArgParser from '@3xpo/argparser';
+
+const argParser = new ArgParser()
+  .defineArgument({
+    type: 'string',
+    name: 'arg1',
+    aliases: ['a', 'b'],
+    default: 'default value',
+    description: 'This is a description of the argument',
+  })
+  .defineArgument({
+    type: 'boolean',
+    name: 'arg2',
+    aliases: ['c'],
+    default: 'default value',
+    description: 'This is a description of the argument',
+  });
+
+// generic is inferred, and can be overwritten to manually specify arg types
+const args = argParser.parse(['--arg1', 'value1', '-c', 'hi']); // => { arg1: 'value1', arg2: true, _: ['hi'] }
+const args2 = argParser.parse(['--arg1', 'value1', '-c', 'false', 'hi']); // => { arg1: 'value1', arg2: false, _: ['hi'] }
+```
+
+Or, if you prefer non-inferred types:
 
 ```ts
 import ArgParser from '@3xpo/argparser';
