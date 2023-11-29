@@ -3,11 +3,12 @@
   "version": "1.1.1",
   "description": "parse node args",
   "main": "dist/lib.cjs",
-  "module": "dist/lib.esm.mjs",
+  "module": "dist/lib.mjs",
   "types": "dist/main.d.ts",
   "typings": "dist/main.d.ts",
   "scripts": {
-    "build": "rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
+    "build": "concurrently \"pnpm esb --outfile=dist/lib.cjs --format=cjs\" \"pnpm esb --outfile=dist/lib.mjs --format=esm\" \"tsc --declaration --emitDeclarationOnly\"",
+    "esb": "esbuild src/main.ts --platform=node --bundle --packages=external --minify",
     "build:docs": "typedoc --out docs --tsconfig doctsconfig.json dist/main.d.ts",
     "test": "jest --passWithNoTests",
     "prepublishOnly": "npm run build && npm run build:docs && git push && git push --tags",
@@ -19,10 +20,10 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/lib.esm.mjs",
+      "import": "./dist/lib.mjs",
       "require": "./dist/lib.cjs",
       "types": "./dist/main.d.ts",
-      "default": "./dist/lib.esm.mjs"
+      "default": "./dist/lib.mjs"
     }
   },
   "keywords": [
@@ -39,14 +40,12 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^11.1.5",
     "@types/jest": "^29.5.10",
     "@types/node": "^20.10.0",
     "changelogen": "^0.5.5",
+    "esbuild": "^0.19.8",
     "jest": "^29.7.0",
     "nodemon": "^3.0.1",
-    "rollup": "^4.6.0",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.2",
     "typedoc": "^0.25.4",
