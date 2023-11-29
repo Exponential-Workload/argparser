@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.1.2
+
+[compare changes](https://github.com/Exponential-Workload/argparser/compare/v1.1.1...v1.1.2)
+
+### 🚀 Enhancements
+
+- Use esbuild ([62810d7](https://github.com/Exponential-Workload/argparser/commit/62810d7))
+
+### 🩹 Fixes
+
+- Push tags on prepub ([3649738](https://github.com/Exponential-Workload/argparser/commit/3649738))
+
+### ❤️ Contributors
+
+- Exponential-Workload <cc@aaathats3as.com>
+
 ## v1.1.1
 
 [compare changes](https://github.com/Exponential-Workload/argparser/compare/v1.1.0...v1.1.1)
