@@ -12,41 +12,57 @@ export type ArgumentType =
 
 /** Argument Value Type */
 export type ArgumentValue<T extends ArgumentType = ArgumentType> =
-  T extends 'string' ? string :
-  T extends 'number' ? number :
-  T extends 'boolean' ? boolean :
-  T extends 'string[]' ? string[] :
-  T extends 'number[]' ? number[] :
-  T extends 'boolean[]' ? boolean[] :
-  T extends 'json' ? any :
-  never;
+  T extends 'string'
+    ? string
+    : T extends 'number'
+    ? number
+    : T extends 'boolean'
+    ? boolean
+    : T extends 'string[]'
+    ? string[]
+    : T extends 'number[]'
+    ? number[]
+    : T extends 'boolean[]'
+    ? boolean[]
+    : T extends 'json'
+    ? any
+    : never;
 
 /** @internal Generic for ParsedArgs */
 export type ParsedArgsAnyGeneric = Record<string, ArgumentValue>;
 
 /** Parsed Argument Type */
-export type ParsedArgs<T extends ParsedArgsAnyGeneric = ParsedArgsAnyGeneric> = {
-  [argName: string]: ArgumentValue;
-  _: string[];
-} & T;
+export type ParsedArgs<T extends ParsedArgsAnyGeneric = ParsedArgsAnyGeneric> =
+  {
+    [argName: string]: ArgumentValue;
+    _: string[];
+  } & T;
 
-export type ArgumentDefinition = {
-  type: ArgumentType;
-  name: string;
+export type ArgumentDefinition<
+  Type extends ArgumentType = ArgumentType,
+  Name extends string = string,
+> = {
+  type: Type;
+  name: Name;
   aliases: string[];
   usageVariableName?: string;
-  default?: any;
+  default?: ArgumentValue<Type>;
   description: string;
-}
+};
+export type ArgDefToArgObj<ArgDef extends ArgumentDefinition> = {
+  [key in ArgDef['name']]: ArgumentValue<ArgDef['type']>;
+};
 
 /** Argument Parser */
-export default class ArgParser {
+export default class ArgParser<
+  ObjParseType extends Record<string, ArgumentValue> = {},
+> {
   /**
-    * Strip the binary name from the command-line arguments.
-    * Refactored variant of yargs hideBin.
-    */
+   * Strip the binary name from the command-line arguments.
+   * Refactored variant of yargs hideBin.
+   */
   public static hideBin(argv = process.argv) {
-    return hideBin(argv)
+    return hideBin(argv);
   }
 
   /**
@@ -59,15 +75,25 @@ export default class ArgParser {
    * @param {ArgumentDefinition} argDef - The argument definition.
    * @returns {ArgParser} - Returns the ArgParser instance for method chaining.
    */
-  public defineArgument(argDef: ArgumentDefinition): ArgParser {
+  public defineArgument<
+    ArgType extends ArgumentType,
+    Name extends string,
+    Def extends ArgumentDefinition<ArgType, Name>,
+  >(
+    argDef: Def,
+  ): ArgParser<
+    ObjParseType & {
+      [key in Def['name']]: ArgumentValue<Def['type']>;
+    }
+  > {
     this.arguments.push(argDef);
     return this;
   }
 
   /**
-    * Strip the binary name from the command-line arguments.
-    * Refactored variant of yargs hideBin.
-    */
+   * Strip the binary name from the command-line arguments.
+   * Refactored variant of yargs hideBin.
+   */
   public hideBin(argv = process.argv): string[] {
     return ArgParser.hideBin(argv);
   }
@@ -77,7 +103,9 @@ export default class ArgParser {
    * @param {string[]} args - An array of command-line arguments.
    * @returns {ParsedArgs} - The parsed arguments as key-value pairs.
    */
-  public parse<T extends ParsedArgsAnyGeneric = ParsedArgsAnyGeneric>(args: string[]): ParsedArgs<T> {
+  public parse<ParseType extends ParsedArgsAnyGeneric = ObjParseType>(
+    args: string[],
+  ): ParsedArgs<ParseType> {
     const parsedArgs: ParsedArgs = {
       _: [],
     };
@@ -103,10 +131,12 @@ export default class ArgParser {
           }
         }
       } else if (currentArgName) {
-        [parsedArgs[currentArgName], wasValueUsed] = this.parseArgValue(arg, currentArgName);
+        [parsedArgs[currentArgName], wasValueUsed] = this.parseArgValue(
+          arg,
+          currentArgName,
+        );
         currentArgName = null;
-        if (!wasValueUsed)
-          i--;
+        if (!wasValueUsed) i--;
       } else {
         parsedArgs['_'].push(arg);
       }
@@ -114,12 +144,15 @@ export default class ArgParser {
 
     // Insert default values
     for (const argDef of this.arguments) {
-      if (!parsedArgs.hasOwnProperty(argDef.name) && argDef.default !== undefined) {
+      if (
+        !parsedArgs.hasOwnProperty(argDef.name) &&
+        argDef.default !== undefined
+      ) {
         parsedArgs[argDef.name] = argDef.default;
       }
     }
 
-    return parsedArgs as ParsedArgs<T>;
+    return parsedArgs as ParsedArgs<ParseType>;
   }
 
   /**
@@ -129,7 +162,11 @@ export default class ArgParser {
    * @param {boolean} useAnsi - Whether to use ANSI formatting.
    * @returns {string} - The help message.
    */
-  public help(programName: string = 'Program', options: string = '[options]', useAnsi: boolean = true): string {
+  public help(
+    programName: string = 'Program',
+    options: string = '[options]',
+    useAnsi: boolean = true,
+  ): string {
     let helpMessage = `Usage: ${programName} ${options}\n\nOptions:\n`;
 
     const messagesShort: string[] = [];
@@ -142,12 +179,19 @@ export default class ArgParser {
       const argDescription = argDef.description;
       const lineLength = 4 + argUsage.length + argDescription.length;
 
-      messagesShort.push(`  ${argUsage}${useAnsi ? '\x1B[0;37m' : ''} - ${argDescription}${useAnsi ? '\x1B[0m' : ''}\n`);
+      messagesShort.push(
+        `  ${argUsage}${useAnsi ? '\x1B[0;37m' : ''} - ${argDescription}${
+          useAnsi ? '\x1B[0m' : ''
+        }\n`,
+      );
       isLong = isLong || lineLength <= 70;
       let m = '';
       m += `  ${argUsage}\n`;
       const wrappedDescription = this.wrapText(argDescription, 68, 4);
-      m += `${useAnsi ? '\x1B[0;37m' : ''}${wrappedDescription.join('\n')}${useAnsi ? '\x1B[0m' : ''}` + '\n';
+      m +=
+        `${useAnsi ? '\x1B[0;37m' : ''}${wrappedDescription.join('\n')}${
+          useAnsi ? '\x1B[0m' : ''
+        }` + '\n';
       messagesLong.push(m);
     }
 
@@ -187,13 +231,16 @@ export default class ArgParser {
    * @returns {ArgumentDefinition | undefined} - The matching argument definition.
    */
   private findArgumentByAlias(alias: string): ArgumentDefinition | undefined {
-    return this.arguments.find(argDef => argDef.aliases.includes(alias));
+    return this.arguments.find(argDef =>
+      (argDef.aliases ?? []).includes(alias),
+    );
   }
 
   private parseArgValue(value: string, argName: string): [any, boolean] {
-    const argDef = this.arguments.find(argDef => argDef.name === argName);
-    if (!argDef)
-      return [value, true];
+    const argDef = this.arguments.find(
+      argDef => argDef.name === argName || argDef.aliases?.includes(argName),
+    );
+    if (!argDef) return [value, true];
 
     const truthyValues = ['true', 'yes', '1', 'on', 't', 'y'];
     const falsyValues = ['false', 'no', '0', 'off', 'f', 'n'];
@@ -204,18 +251,9 @@ export default class ArgParser {
         return [this.parseSingleValue(value, argDef.type), true];
       case 'boolean':
         const lowercasedValue = value.toLowerCase();
-        // if (truthyValues.includes(lowercasedValue)) {
-        //   return true;
-        // } else if (falsyValues.includes(lowercasedValue)) {
-        //   return false;
-        // } else if (argDef.default !== undefined) {
-        //   return argDef.default;
-        // } else {
-        //   return false; // Default to false if no valid boolean representation found
-        // }
-        const falsyValuesHas = falsyValues.includes(lowercasedValue)
-        const truthyValuesHas = truthyValues.includes(lowercasedValue)
-        const eitherHas = falsyValuesHas || truthyValuesHas
+        const falsyValuesHas = falsyValues.includes(lowercasedValue);
+        const truthyValuesHas = truthyValues.includes(lowercasedValue);
+        const eitherHas = falsyValuesHas || truthyValuesHas;
         return [!falsyValuesHas, eitherHas];
       case 'string[]':
       case 'number[]':
@@ -229,9 +267,7 @@ export default class ArgParser {
   }
 
   private parseSingleValue(value: string, type: string): any {
-    if (type === 'number') {
-      return parseFloat(value);
-    }
+    if (type === 'number') return parseFloat(value);
     return value;
   }
 
@@ -250,7 +286,9 @@ export default class ArgParser {
   }
 
   private formatArgumentUsage(argDef: ArgumentDefinition): string {
-    const aliases = [argDef.name, ...argDef.aliases].map(alias => (alias.length === 1 ? `-${alias}` : `--${alias}`));
+    const aliases = [argDef.name, ...(argDef.aliases ?? [])].map(alias =>
+      alias.length === 1 ? `-${alias}` : `--${alias}`,
+    );
     const usage = aliases.join(', ');
     if (argDef.type !== 'boolean') {
       return `${usage} <${argDef.usageVariableName ?? 'Value'}>`;

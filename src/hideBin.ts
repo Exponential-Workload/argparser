@@ -27,15 +27,17 @@ THE SOFTWARE.
 */
 
 /** {@link https://github.com/electron/electron/blob/main/docs/api/process.md#processdefaultapp-readonly Electron Docs} */
-export const isBundledElectronApp = () => isElectronApp() && !(process as any).defaultApp;
+export const isBundledElectronApp = () =>
+  isElectronApp() && !(process as any).defaultApp;
 
 /** {@link https://github.com/electron/electron/blob/main/docs/api/process.md#processversionselectron-readonly Electron Docs} */
 export const isElectronApp = () => !!process.versions.electron;
 
 /** Get the index of the binary in process.argv */
-export const getProcessArgvBinIndex = () => isBundledElectronApp() ? 0 : 1
+export const getProcessArgvBinIndex = () => (isBundledElectronApp() ? 0 : 1);
 
 /** Yargs' hideBin, slightly refactored */
-export const hideBin = (argv: string[]) => argv.slice(getProcessArgvBinIndex() + 1)
+export const hideBin = (argv: string[]) =>
+  argv.slice(getProcessArgvBinIndex() + 1);
 
-export default hideBin
+export default hideBin;
